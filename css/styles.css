@@ -1,0 +1,158 @@
+body {
+    background-color: #111827;
+    color: #f3f4f6;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.bg-dark { background-color: #111827; }
+.bg-panel { background-color: #1f2937; }
+.bg-card { background-color: #374151; }
+.bg-card-hover { background-color: #4b5563; }
+.text-light { color: #f3f4f6; }
+.text-muted { color: #9ca3af; }
+.border-dark { border-color: #4b5563; }
+.primary { color: #3b82f6; }
+.primary-bg { background-color: #1e40af; }
+.accent { color: #60a5fa; }
+.success { color: #10b981; }
+.warning { color: #f59e0b; }
+.danger { color: #ef4444; }
+
+.drag-area {
+    border: 2px dashed #4b5563;
+    transition: all 0.3s ease;
+}
+.drag-area.drag-over {
+    border-color: #3b82f6;
+    background-color: #1e3a8a;
+}
+
+.metadata-row {
+    border-bottom: 1px solid #374151;
+    transition: background-color 0.2s ease;
+}
+.metadata-row:last-child {
+    border-bottom: none;
+}
+.metadata-row:hover {
+    background-color: #374151;
+}
+
+.hex-view {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    background-color: #000;
+    color: #00ff00;
+}
+
+.loading {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.comparison-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.file-tab {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.file-tab.active {
+    background-color: #1e40af;
+    color: white;
+}
+
+.metadata-highlight {
+    background-color: #fef3c7;
+    color: #92400e;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.privacy-tools {
+    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    border: 1px solid #059669;
+}
+
+.search-highlight {
+    background-color: #fbbf24;
+    color: #92400e;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.125rem;
+}
+
+.diff-added {
+    background-color: #065f46;
+    border-left: 3px solid #10b981;
+}
+
+.diff-removed {
+    background-color: #7f1d1d;
+    border-left: 3px solid #ef4444;
+}
+
+.diff-changed {
+    background-color: #92400e;
+    border-left: 3px solid #f59e0b;
+}
+
+.diff-same {
+    opacity: 0.7;
+}
+
+/* Explicit icon sizing to override any Tailwind issues */
+svg.w-4, .w-4 {
+    width: 1rem !important;
+}
+svg.h-4, .h-4 {
+    height: 1rem !important;
+}
+svg.w-6, .w-6 {
+    width: 1.5rem !important;
+}
+svg.h-6, .h-6 {
+    height: 1.5rem !important;
+}
+svg.w-8, .w-8 {
+    width: 2rem !important;
+}
+svg.h-8, .h-8 {
+    height: 2rem !important;
+}
+svg.w-12, .w-12 {
+    width: 3rem !important;
+}
+svg.h-12, .h-12 {
+    height: 3rem !important;
+}
+svg.w-16, .w-16 {
+    width: 4rem !important;
+}
+svg.h-16, .h-16 {
+    height: 4rem !important;
+}
+svg.w-32, .w-32 {
+    width: 8rem !important;
+}
+svg.h-32, .h-32 {
+    height: 8rem !important;
+}
+
+/* Additional SVG specific rules */
+svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Ensure icons don't grow beyond their containers */
+.flex svg {
+    flex-shrink: 0;
+}

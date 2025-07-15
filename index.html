@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Metadata Viewer - Forensic Grade Analysis Tool</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Local Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen bg-dark">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-light mb-2">Professional Metadata Viewer</h1>
+            <p class="text-muted text-lg">Advanced forensic-grade metadata extraction and analysis tool</p>
+        </div>
+
+        <!-- Privacy Notice -->
+        <div class="bg-panel rounded-lg p-6 mb-6 border border-dark">
+            <div class="flex items-center mb-3">
+                <svg class="w-6 h-6 text-green-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <h3 class="text-light font-bold text-lg">100% Privacy Protected</h3>
+            </div>
+            <p class="text-muted mb-4">All files are processed entirely within your browser. No data is transmitted to external servers or stored remotely.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-light">Local Processing</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-light">No Data Transmission</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-light">Forensic Grade</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Upload Area -->
+        <div class="bg-panel rounded-lg p-6 mb-6 border border-dark">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-light">File Upload</h2>
+                <div class="flex gap-2">
+                    <button id="compareMode" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        Compare Mode
+                    </button>
+                    <button id="clearAll" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                        Clear All
+                    </button>
+                </div>
+            </div>
+            
+            <div id="dropZone" class="drag-area rounded-lg p-12 text-center">
+                <svg class="w-8 h-8 mx-auto mb-4 text-muted" style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-light mb-2">Drop files here or click to browse</h3>
+                <p class="text-muted mb-4">Supports: Images (JPEG, PNG, TIFF), Documents (PDF, DOCX, XLSX), Media files (MP4, MP3)</p>
+                <input type="file" id="fileInput" class="hidden" multiple accept="image/*,.pdf,.doc,.docx,.xlsx,.xls,audio/*,video/*,.tiff,.tif">
+                <button id="browseBtn" class="primary-bg text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    Browse Files
+                </button>
+            </div>
+        </div>
+
+        <!-- File Tabs -->
+        <div id="fileTabs" class="hidden bg-panel rounded-lg p-4 mb-6 border border-dark">
+            <div class="flex flex-wrap gap-2" id="fileTabsContainer"></div>
+        </div>
+
+        <!-- Privacy Tools -->
+        <div id="privacyTools" class="hidden privacy-tools rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold text-light mb-4 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                Privacy & Sanitization Tools
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-black bg-opacity-20 p-4 rounded-lg">
+                    <h3 class="text-light font-semibold mb-2">Metadata Sanitization</h3>
+                    <p class="text-gray-300 text-sm mb-3">Remove sensitive metadata before sharing files</p>
+                    <button id="sanitizeBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                        Sanitize Current File
+                    </button>
+                </div>
+                <div class="bg-black bg-opacity-20 p-4 rounded-lg">
+                    <h3 class="text-light font-semibold mb-2">Privacy Report</h3>
+                    <p class="text-gray-300 text-sm mb-3">Generate report of potentially sensitive metadata</p>
+                    <button id="privacyReport" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors">
+                        Generate Report
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="hidden bg-panel rounded-lg p-6 mb-6 border border-dark">
+            <div class="flex items-center">
+                <div class="loading w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mr-3"></div>
+                <span class="text-light">Processing file...</span>
+            </div>
+        </div>
+
+        <!-- Results Area -->
+        <div id="resultsArea" class="hidden">
+            <!-- Search and Filter -->
+            <div class="bg-panel rounded-lg p-6 mb-6 border border-dark">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="flex-1">
+                        <label class="text-light font-medium mb-2 block">Search Metadata</label>
+                        <div class="relative">
+                            <input type="text" id="searchInput" placeholder="Search keys, values, or both..." 
+                                   class="w-full px-4 py-2 bg-card text-light rounded-lg border border-dark focus:border-blue-500 focus:outline-none">
+                            <div class="absolute right-2 top-2">
+                                <button id="regexToggle" class="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors" title="Toggle Regex Mode">
+                                    .*
+                                </button>
+                            </div>
+                        </div>
+                        <div id="regexStatus" class="text-xs text-muted mt-1 hidden">Regex mode enabled</div>
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-light font-medium mb-2 block">Filter by Category</label>
+                        <select id="categoryFilter" class="w-full px-4 py-2 bg-card text-light rounded-lg border border-dark focus:border-blue-500 focus:outline-none">
+                            <option value="">All Categories</option>
+                            <option value="general">General</option>
+                            <option value="exif">EXIF Data</option>
+                            <option value="document">Document Properties</option>
+                            <option value="system">System Metadata</option>
+                            <option value="media">Media Properties</option>
+                            <option value="location">GPS Location</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Information -->
+            <div class="bg-panel rounded-lg p-6 mb-6 border border-dark">
+                <h2 class="text-xl font-semibold text-light mb-4">File Information</h2>
+                <div class="flex flex-col lg:flex-row gap-6">
+                    <div id="fileThumbnail" class="flex-shrink-0"></div>
+                    <div id="fileInfo" class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow"></div>
+                </div>
+            </div>
+
+            <!-- Comparison Mode -->
+            <div id="comparisonView" class="hidden bg-panel rounded-lg p-6 mb-6 border border-dark">
+                <h2 class="text-xl font-semibold text-light mb-4">Metadata Comparison</h2>
+                <div id="comparisonContent" class="comparison-split"></div>
+            </div>
+
+            <!-- Metadata Tabs -->
+            <div class="bg-panel rounded-lg border border-dark">
+                <div class="flex border-b border-dark overflow-x-auto">
+                    <button class="tab-btn active px-6 py-3 text-light font-medium hover:bg-card transition-colors whitespace-nowrap" data-tab="general">
+                        General
+                    </button>
+                    <button class="tab-btn px-6 py-3 text-muted font-medium hover:bg-card transition-colors whitespace-nowrap" data-tab="exif">
+                        EXIF Data
+                    </button>
+                    <button class="tab-btn px-6 py-3 text-muted font-medium hover:bg-card transition-colors whitespace-nowrap" data-tab="document">
+                        Document Properties
+                    </button>
+                    <button class="tab-btn px-6 py-3 text-muted font-medium hover:bg-card transition-colors whitespace-nowrap" data-tab="system">
+                        System
+                    </button>
+                    <button class="tab-btn px-6 py-3 text-muted font-medium hover:bg-card transition-colors whitespace-nowrap" data-tab="media">
+                        Media Properties
+                    </button>
+                    <button class="tab-btn px-6 py-3 text-muted font-medium hover:bg-card transition-colors whitespace-nowrap" data-tab="location">
+                        GPS Location
+                    </button>
+                    <button class="tab-btn px-6 py-3 text-muted font-medium hover:bg-card transition-colors whitespace-nowrap" data-tab="hex">
+                        Hex View
+                    </button>
+                </div>
+
+                <div class="p-6">
+                    <div id="generalTab" class="tab-content">
+                        <div id="generalMetadata" class="space-y-2"></div>
+                    </div>
+                    <div id="exifTab" class="tab-content hidden">
+                        <div id="exifMetadata" class="space-y-2"></div>
+                    </div>
+                    <div id="documentTab" class="tab-content hidden">
+                        <div id="documentMetadata" class="space-y-2"></div>
+                    </div>
+                    <div id="systemTab" class="tab-content hidden">
+                        <div id="systemMetadata" class="space-y-2"></div>
+                    </div>
+                    <div id="mediaTab" class="tab-content hidden">
+                        <div id="mediaMetadata" class="space-y-2"></div>
+                    </div>
+                    <div id="locationTab" class="tab-content hidden">
+                        <div id="locationMetadata" class="space-y-4">
+                            <div id="gpsInfo" class="bg-card p-4 rounded-lg"></div>
+                            <div id="mapContainer" class="h-64 bg-card rounded-lg"></div>
+                        </div>
+                    </div>
+                    <div id="hexTab" class="tab-content hidden">
+                        <div id="hexView" class="hex-view p-4 rounded-lg max-h-96 overflow-y-auto"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Options -->
+            <div class="bg-panel rounded-lg p-6 mt-6 border border-dark">
+                <h2 class="text-xl font-semibold text-light mb-4">Export Options</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="text-light font-medium mb-2">Export Formats</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button id="exportJSON" class="primary-bg text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                Export as JSON
+                            </button>
+                            <button id="exportTXT" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                                Export as Text
+                            </button>
+                            <button id="exportCSV" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                                Export as CSV
+                            </button>
+                            <button id="exportXML" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                                Export as XML
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-light font-medium mb-2">Forensic Reports</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button id="exportForensic" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                Forensic Report
+                            </button>
+                            <button id="exportComparison" class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors">
+                                Comparison Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the main application script -->
+    <script src="js/app.js"></script>
+</body>
+</html>
