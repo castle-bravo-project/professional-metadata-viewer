@@ -4,7 +4,7 @@
 
 > **Perfect for:** Journalists, Legal Professionals, Privacy Advocates, Digital Forensics, Content Creators, and Anyone Who Cares About Digital Privacy
 
-![Professional Metadata Viewer](https://img.shields.io/badge/Status-Active-green) ![License](https://img.shields.io/badge/License-MIT-blue) ![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local-brightgreen) ![No Signup](https://img.shields.io/badge/No%20Signup-Required-orange)
+![Professional Metadata Viewer](https://img.shields.io/badge/Status-Active-green) ![License](https://img.shields.io/badge/License-MIT-blue) ![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local-brightgreen) ![No Signup](https://img.shields.io/badge/No%20Signup-Required-orange) [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](link) ![Static Badge](https://img.shields.io/badge/Validation-Pending-red) 
 
 ---
 
