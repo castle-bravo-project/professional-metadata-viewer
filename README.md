@@ -27,7 +27,7 @@ Every digital file contains **hidden metadata** - invisible information about:
 
 ---
 
-## ✨ **Key Features (All Working Now!)**
+## ✨ **Key Features**
 
 ### 🛡️ **100% Private & Secure**
 - ✅ **No Internet Required** - Works completely offline
